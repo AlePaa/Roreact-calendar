@@ -7,8 +7,8 @@ class SearchForm extends React.Component {
 	}
 
 	onSearch() {
-		var query = this.input.value;
-		var self = this;
+		const query = this.input.value;
+		const self = this;
 		$.ajax({
 			url: '/api/events/search',
 			data: { query: query },

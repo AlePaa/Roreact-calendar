@@ -8,7 +8,7 @@ class EventApplication extends React.Component {
 	}
 
 	componentDidMount() {
-		var self = this;
+		const self = this;
 
 		$.ajax({
 			url: '/api/events',
@@ -26,8 +26,15 @@ class EventApplication extends React.Component {
 	}
 
 	handleAdd(event) {
-		var events = this.state.events;
+		const events = this.state.events;
 		events.push(event);
+		this.setState({ events: events });
+	}
+
+	handleDeleteRecord(event) {
+		const events = this.state.events.slice();
+		const index = events.indexOf(event);
+		events.splice(index,1);
 		this.setState({ events: events });
 	}
 
@@ -45,7 +52,8 @@ class EventApplication extends React.Component {
 			  </div>
 			  <div className="row">
 			    <div className="col-md-12">
-			      <EventTable events={this.state.events} />
+			      <EventTable events={this.state.events} 
+			      			  handleDeleteRecord={this.handleDeleteRecord} />
 			    </div>
 			  </div>
 			</div>

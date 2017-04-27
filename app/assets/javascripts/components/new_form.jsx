@@ -21,7 +21,7 @@ class NewForm extends React.Component {
 
 	handleAdd(e) {
 		e.preventDefault();
-		var self = this;
+		const self = this;
 		if (this.isValidForm()) {
 			$.ajax({
 				url: '/api/events',
@@ -47,8 +47,8 @@ class NewForm extends React.Component {
 
 	handleChange(e) {
 		console.log(e.target.value);
-		var input_name = e.target.name;
-		var value = e.target.value;
+		const input_name = e.target.name;
+		const value = e.target.value;
 		this.setState({ [input_name] : value });
 	}
 
