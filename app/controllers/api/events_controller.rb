@@ -28,7 +28,7 @@ module Api
 	end
 
 	def update
-	  if @event.update(params.require(:event).permit(:name, :description, :event_date, :place))
+	  if @event.update event_params
 		render json: @event
 	  else
 		render nothing: true, status: :unprocessable_entity
@@ -46,13 +46,15 @@ module Api
     end
 
     def sort_by
+    	puts "sortby"
       %w(name
     	place
     	description
-    	event_date).include?(params[:sort_by]) ? params[sort_by] : 'name'
+    	event_date).include?(params[:sort_by]) ? params[:sort_by] : 'name'
     end
 
     def order
+    	puts "orderby"
       %w(asc desc).include?(params[:order]) ? params[:order] : 'asc'
     end
   end

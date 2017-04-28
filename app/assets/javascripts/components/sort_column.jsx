@@ -7,7 +7,7 @@ class SortColumn extends React.Component {
 
 	handleSort(e) {
 		e.preventDefault();
-		const order = this.props.order == 'desc' ? 'asc' : 'desc';
+		const order = (this.props.order == 'desc') ? 'asc' : 'desc';
 		this.props.handleSortColumn(this.props.name, order);
 	}
 	render() {

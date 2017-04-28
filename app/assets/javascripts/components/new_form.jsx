@@ -30,7 +30,6 @@ class NewForm extends React.Component {
 				type: 'POST',
 				success(data) {
 					self.props.handleAdd(data);
-					self.setState(self.getInitialState());
 				},
 				error(xhr, status, error) {
 					alert('Cannot add a new record: ', error);

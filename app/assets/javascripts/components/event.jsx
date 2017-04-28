@@ -31,7 +31,6 @@ class Event extends React.Component {
 
 	handleUpdate(e) {
 		e.preventDefault();
-		console.log(this.state);
 		if(this.isValidRecord()) {
 			const event_data = {
 				name: this.state.name,
@@ -57,11 +56,12 @@ class Event extends React.Component {
 
 	onDelete(e) {
 		e.preventDefault();
+		var self = this;
 		$.ajax({
 			method: 'DELETE',
-			url: '/api/events/' + this.props.event.id,
+			url: '/api/events/' + self.props.event.id,
 			success(data) {
-				this.props.handleDeleteRecord(this.props.event);
+				self.props.handleDeleteRecord(self.props.event);
 			},
 			error(xhr, status, error) {
 				alert('Cannot delete requested record: ', error);

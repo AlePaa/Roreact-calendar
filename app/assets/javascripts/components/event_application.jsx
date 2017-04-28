@@ -8,6 +8,8 @@ class EventApplication extends React.Component {
 		this.handleSearch = this.handleSearch.bind(this);
 		this.handleAdd = this.handleAdd.bind(this);
 		this.handleSortColumn = this.handleSortColumn.bind(this);
+		this.handleUpdateRecord = this.handleUpdateRecord.bind(this);
+		this.handleDeleteRecord = this.handleDeleteRecord.bind(this);
 	}
 
 	componentDidMount() {
@@ -42,6 +44,7 @@ class EventApplication extends React.Component {
 	}
 
 	handleUpdateRecord(old_event, event) {
+		console.log(this.state);
 		var events = this.state.events.slice();
 		const index = events.indexOf(old_event);
 		events.splice(index, 1, event);
@@ -49,13 +52,14 @@ class EventApplication extends React.Component {
 	}
 
 	handleSortColumn(name, order) {
+		var self = this;
 		if (this.state.sort != name) {order = 'asc';}
 		$.ajax({
 			data: {sort_by: name, order: order},
 			url: '/api/events',
 			type: 'GET',
 			success(data) {
-				this.setState({ events: data, sort: name, order: order });
+				self.setState({ events: data, sort: name, order: order });
 			},
 			error(xhr, status, error) {
 				alert('Error sorting events: ', error);
