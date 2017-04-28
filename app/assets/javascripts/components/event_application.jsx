@@ -1,10 +1,13 @@
 class EventApplication extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { events: [] };
+		this.state = { 	events: [],
+						sort: "name",
+						order: "asc" };
 
 		this.handleSearch = this.handleSearch.bind(this);
 		this.handleAdd = this.handleAdd.bind(this);
+		this.handleSortColumn = this.handleSortColumn.bind(this);
 	}
 
 	componentDidMount() {
@@ -26,16 +29,38 @@ class EventApplication extends React.Component {
 	}
 
 	handleAdd(event) {
-		const events = this.state.events;
+		var events = this.state.events;
 		events.push(event);
 		this.setState({ events: events });
 	}
 
 	handleDeleteRecord(event) {
-		const events = this.state.events.slice();
+		var events = this.state.events.slice();
 		const index = events.indexOf(event);
 		events.splice(index,1);
 		this.setState({ events: events });
+	}
+
+	handleUpdateRecord(old_event, event) {
+		var events = this.state.events.slice();
+		const index = events.indexOf(old_event);
+		events.splice(index, 1, event);
+		this.setState({ events: events });
+	}
+
+	handleSortColumn(name, order) {
+		if (this.state.sort != name) {order = 'asc';}
+		$.ajax({
+			data: {sort_by: name, order: order},
+			url: '/api/events',
+			type: 'GET',
+			success(data) {
+				this.setState({ events: data, sort: name, order: order });
+			},
+			error(xhr, status, error) {
+				alert('Error sorting events: ', error);
+			}
+		});
 	}
 
 	render() {
@@ -52,8 +77,12 @@ class EventApplication extends React.Component {
 			  </div>
 			  <div className="row">
 			    <div className="col-md-12">
-			      <EventTable events={this.state.events} 
-			      			  handleDeleteRecord={this.handleDeleteRecord} />
+			      <EventTable events={this.state.events}
+			      			  sort={this.state.sort}
+			      			  order={this.state.order} 
+			      			  handleDeleteRecord={this.handleDeleteRecord}
+			      			  handleUpdateRecord={this.handleUpdateRecord}
+			      			  handleSortColumn={this.handleSortColumn} />
 			    </div>
 			  </div>
 			</div>

@@ -24,9 +24,10 @@ class NewForm extends React.Component {
 		const self = this;
 		if (this.isValidForm()) {
 			$.ajax({
-				url: '/api/events',
-				method: 'POST',
 				data: { event: self.state },
+				dataType: "json",
+				url: '/api/events',
+				type: 'POST',
 				success(data) {
 					self.props.handleAdd(data);
 					self.setState(self.getInitialState());
@@ -46,7 +47,6 @@ class NewForm extends React.Component {
 	}
 
 	handleChange(e) {
-		console.log(e.target.value);
 		const input_name = e.target.name;
 		const value = e.target.value;
 		this.setState({ [input_name] : value });
@@ -60,7 +60,6 @@ class NewForm extends React.Component {
 		      			className="form-control"
 		      			name="name"
 		      			placeholder="Name"
-		      			ref={name => this.input = name}
 		      			value={this.state.name}
 		      			onChange={this.handleChange} />
 		    </div>
@@ -69,7 +68,6 @@ class NewForm extends React.Component {
                  		className="form-control"
                  		name="place"
                  		placeholder="Place"
-                 		ref={place => this.input = place}
                  		value={this.state.place}
                  		onChange={this.handleChange} />
 			</div>
@@ -78,7 +76,6 @@ class NewForm extends React.Component {
 		      			className="form-control"
 		      			name="event_date"
 		      			placeholder="Event date"
-		      			ref={event_date => this.input = event_date}
 		      			value={this.state.event_date}
 		      			onChange={this.handleChange} />
 		    </div>
@@ -87,7 +84,6 @@ class NewForm extends React.Component {
 		      			className="form-control"
 		      			name="description"
 		      			placeholder="Description"
-		      			ref={description => this.input = description}
 		      			value={this.state.description}
 		      			onChange={this.handleChange} />
 		    </div>

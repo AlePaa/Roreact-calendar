@@ -3,11 +3,11 @@ module Api
   	before_action :set_event, only: [:update, :destroy]
 
     def index
-      render json: Event.all
+      render json: Event.order(sort_by + ' ' + order)
     end
 
     def create
-      event = Event.new(event_params)
+      event = Event.create event_params
     	if event.save
     	  render json: event
     	else
@@ -28,21 +28,32 @@ module Api
 	end
 
 	def update
-	  if @event.update(event_params)
+	  if @event.update(params.require(:event).permit(:name, :description, :event_date, :place))
 		render json: @event
 	  else
 		render nothing: true, status: :unprocessable_entity
 	  end
 	end
-  end
 
   private
 
-  def event_params
-  	params.require(:event).permit(:name, :description, :event_date, :place)
-  end
+    def event_params
+  	  params.require(:event).permit(:name, :description, :event_date, :place)
+    end
 
-  def set_event
-  	@event = Event.find(params[:id])
+    def set_event
+  	  @event = Event.find(params[:id])
+    end
+
+    def sort_by
+      %w(name
+    	place
+    	description
+    	event_date).include?(params[:sort_by]) ? params[sort_by] : 'name'
+    end
+
+    def order
+      %w(asc desc).include?(params[:order]) ? params[:order] : 'asc'
+    end
   end
 end

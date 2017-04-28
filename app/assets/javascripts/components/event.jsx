@@ -9,13 +9,19 @@ class Event extends React.Component {
 	constructor(props){
 		super(props);
 
-		this.state = { edit: false, name: '', date: '', place: '', description: '' };
+		this.state = { 	edit: false, 
+						name: this.props.event.name,
+						event_date: this.props.event.event_date,
+						place: this.props.event.place,
+						description: this.props.event.description };
+
 		this.onDelete = this.onDelete.bind(this);
 		this.renderForm = this.renderForm.bind(this);
 		this.renderRecord = this.renderRecord.bind(this);
 		this.handleToggle = this.handleToggle.bind(this);
 		this.handleUpdate = this.handleUpdate.bind(this);
 		this.isValidRecord = this.isValidRecord.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
 	handleToggle(e) {
@@ -30,18 +36,19 @@ class Event extends React.Component {
 			const event_data = {
 				name: this.state.name,
 				description: this.state.description,
-				date: this.state.date,
+				event_date: this.state.event_date,
 				place: this.state.place
 			};
 			$.ajax({
-				method: 'PUT',
-				url: '/api/events/' + this.props.event.id,
 				data: { event: event_data },
-				success(data) {
+				dataType: "json",
+				url: '/api/events/' + this.props.event.id,
+				type: 'PUT',
+				success:(data) => {
 					this.props.handleUpdateRecord(this.props.event, data);
 					this.setState({ edit: false});
 				},
-				error(xhr, status, error) {
+				error:(xhr, status, error) => {
 					alert('Cannot update record:', error);
 				}
 			});
@@ -65,8 +72,14 @@ class Event extends React.Component {
 	isValidRecord(){
 		return (this.state.name &&
 				this.state.place &&
-				this.state.date &&
+				this.state.event_date &&
 				this.state.description);
+	}
+
+	handleChange(e) {
+		const input_name = e.target.name;
+		const value = e.target.value;
+		this.setState({ [input_name] : value });
 	}
 
 	renderForm() {
@@ -77,7 +90,7 @@ class Event extends React.Component {
 					defaultValue={this.props.event.name}
 					className="form-control"
 					type="text"
-					onChange={event => this.setState({ name: event.target.value })}
+					onChange={this.handleChange}
 					/>
 					</td>
 				<td>
@@ -85,7 +98,7 @@ class Event extends React.Component {
 					defaultValue={this.props.event.event_date}
 					className="form-control"
 					type="date"
-					onChange={event => this.setState({ date: event.target.value })}
+					onChange={this.handleChange}
 					/>
 				</td>
 				<td>
@@ -93,7 +106,7 @@ class Event extends React.Component {
 					defaultValue={this.props.event.place}
 					className="form-control"
 					type="text"
-					onChange={event => this.setState({ place: event.target.value })}
+					onChange={this.handleChange}
 					/>
 				</td>
 				<td>
@@ -101,7 +114,7 @@ class Event extends React.Component {
 					defaultValue={this.props.event.description}
 					className="form-control"
 					type="text"
-					onChange={event => this.setState({ description: event.target.value })}
+					onChange={this.handleChange}
 					/>
 				</td>
 				<td>
@@ -119,7 +132,7 @@ class Event extends React.Component {
 	}
 
 	renderRecord() {
-		var event = this.props.event;
+		const event = this.props.event;
 		return (
 			<tr>
 				<td>{event.name}</td>
